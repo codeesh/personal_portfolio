@@ -1,21 +1,23 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Montserrat, Poppins } from "next/font/google";
 import "./globals.css";
 
-const manrope = Manrope({
+const poppins = Poppins({
   variable: "--font-sans",
-  subsets: ["latin"],
-});
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-display",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
 
+const montserrat = Montserrat({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+});
+
 export const metadata: Metadata = {
-  title: "Eshtab | Portfolio",
-  description: "Minimalist portfolio showcasing selected work and skills.",
+  title: "Eshtab Mahmud | Developer, Designer, Digital Solutions",
+  description:
+    "Portfolio of Eshtab Mahmud - Web Developer, Graphic Designer, and Digital Solutions Provider helping businesses grow online.",
 };
 
 export default function RootLayout({
@@ -25,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${manrope.variable} ${cormorant.variable} antialiased`}>
+      <body className={`${poppins.variable} ${montserrat.variable} antialiased`}>
         {children}
       </body>
     </html>

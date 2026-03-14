@@ -1,246 +1,341 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
+import { InputField, TextareaField } from "@/components/portfolio/FormField";
+import { Section } from "@/components/portfolio/Section";
+import { caseStudies } from "@/content/caseStudies";
+import { projects } from "@/content/projects";
+import { services } from "@/content/services";
+import { skills } from "@/content/skills";
+import { testimonials } from "@/content/testimonials";
+
+const navSections = [
+  { id: "hero", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "services", label: "Services" },
+  { id: "portfolio", label: "Portfolio" },
+  { id: "case-studies", label: "Case Studies" },
+  { id: "testimonials", label: "Testimonials" },
+  { id: "contact", label: "Contact" },
+];
+
 export default function Home() {
+  const [activeSection, setActiveSection] = useState("hero");
+
+  useEffect(() => {
+    const onScroll = () => {
+      const triggerLine = 120;
+      let current = "hero";
+
+      for (const item of navSections) {
+        const element = document.getElementById(item.id);
+        if (!element) {
+          continue;
+        }
+
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= triggerLine && rect.bottom > triggerLine) {
+          current = item.id;
+          break;
+        }
+
+        if (rect.top <= triggerLine) {
+          current = item.id;
+        }
+      }
+
+      setActiveSection((prev) => (prev === current ? prev : current));
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
+
   return (
-    <div className="relative min-h-screen">
-      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl flex-col gap-20 px-6 pb-24 pt-10 sm:px-10 lg:px-16">
-        <header className="flex flex-wrap items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-[#95a694]/40 bg-[#111313] text-lg font-semibold text-[#b7c4b5]">
-              E
-            </div>
-            <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-[#b7b9b3]">
-                Portfolio
-              </p>
-              <h1 className="text-xl font-semibold text-[#f2f3f0]">
-                Eshtab Rak Mahmud
-              </h1>
-            </div>
-          </div>
-          <nav className="flex flex-wrap items-center gap-6 text-sm uppercase tracking-[0.25em] text-[#b7b9b3]">
-            <a className="transition hover:text-[#f2f3f0]" href="#about">
-              About
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#projects">
-              Projects
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#skills">
-              Skills
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#contact">
-              Contact
-            </a>
+    <main className="pt-16">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-[rgba(154,176,209,0.16)] bg-[rgba(7,11,18,0.9)] shadow-[0_8px_24px_rgba(0,0,0,0.3)] backdrop-blur-md">
+        <div className="mx-auto flex min-h-[4.2rem] w-[min(1120px,92vw)] items-center justify-between gap-4 md:min-h-[3.85rem]">
+          <a
+            href="#hero"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-[0.65rem] border border-[rgba(154,176,209,0.28)] bg-[rgba(18,28,45,0.7)] text-sm font-bold text-[var(--text)]"
+            aria-label="Go to homepage"
+          >
+            EM
+          </a>
+
+          <nav className="flex items-center gap-1 overflow-x-auto py-1" aria-label="Main navigation">
+            {navSections.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition md:text-sm ${
+                  activeSection === item.id
+                    ? "border-[rgba(30,200,165,0.7)] bg-gradient-to-r from-[var(--accent)] to-[#20e4bb] text-[#061620]"
+                    : "border-transparent text-[#c5d7f1] hover:border-[rgba(154,176,209,0.25)] hover:text-[var(--text)]"
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
-        </header>
+        </div>
+      </header>
 
-        <section className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="flex flex-col gap-8">
-            <p className="text-sm uppercase tracking-[0.4em] text-[#95a694]">
-              Product Designer + Frontend Developer
-            </p>
-            <h2 className="font-[var(--font-display)] text-[clamp(2.6rem,5vw,4.4rem)] leading-[1.05] text-[#f2f3f0]">
-              Building precise, minimal digital experiences with a quiet edge.
-            </h2>
-            <p className="max-w-2xl text-lg leading-8 text-[#b7b9b3]">
-              I craft interfaces that feel deliberate, calm, and functional. My
-              work blends product thinking with clean front-end execution,
-              translating complex ideas into simple, focused user journeys.
-            </p>
-            <div className="flex flex-wrap items-center gap-4">
-              <a
-                className="rounded-full border border-[#95a694] px-6 py-3 text-sm uppercase tracking-[0.3em] text-[#0b0c0c] transition hover:-translate-y-0.5 hover:bg-[#b7c4b5] hover:text-[#0b0c0c]"
-                href="/resume.pdf"
-              >
-                Resume
-              </a>
-              <a
-                className="rounded-full border border-[#2b2f2d] px-6 py-3 text-sm uppercase tracking-[0.3em] text-[#f2f3f0] transition hover:-translate-y-0.5 hover:border-[#95a694]"
-                href="#contact"
-              >
-                Contact
-              </a>
-            </div>
-          </div>
-          <div className="flex flex-col gap-6 rounded-3xl border border-[#1b1f1d] bg-[#0f1111]/80 p-8">
-            <div className="flex items-center justify-between text-sm uppercase tracking-[0.3em] text-[#b7b9b3]">
-              <span>Currently</span>
-              <span className="text-[#95a694]">Open to work</span>
-            </div>
-            <p className="text-xl leading-8 text-[#f2f3f0]">
-              Designing and building calm, high-utility interfaces for startups
-              and product teams.
-            </p>
-            <div className="grid gap-4 text-sm text-[#b7b9b3]">
-              <div className="flex items-center justify-between border-b border-[#1b1f1d] pb-3">
-                <span>Location</span>
-                <span className="text-[#f2f3f0]">Toronto, Canada</span>
-              </div>
-              <div className="flex items-center justify-between border-b border-[#1b1f1d] pb-3">
-                <span>Experience</span>
-                <span className="text-[#f2f3f0]">5+ years</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span>Focus</span>
-                <span className="text-[#f2f3f0]">UI Systems, Web Apps</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="about" className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
+      <section className="grid min-h-[96vh] items-center scroll-mt-24 py-20 md:min-h-0" id="hero">
+        <div className="mx-auto grid w-[min(1120px,92vw)] items-center gap-8 lg:grid-cols-[1.3fr_1fr]">
           <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-[#95a694]">
-              About
+            <span className="mb-3 inline-block text-xs font-semibold uppercase tracking-[0.04em] text-[var(--accent)]">
+              Web Developer | Graphic Designer | Digital Solutions Provider
+            </span>
+            <h1 className="text-3xl font-semibold leading-tight md:text-4xl">Hi, I&apos;m</h1>
+            <h1 className="mt-2 text-4xl font-bold leading-[1.08] md:text-6xl">Eshtab Rak Mahmud</h1>
+            <p className="mt-4 max-w-[58ch] text-base text-[var(--muted)] md:text-lg">
+              I build modern websites, create engaging designs, and help businesses
+              grow their online presence.
             </p>
-            <h3 className="mt-4 font-[var(--font-display)] text-4xl text-[#f2f3f0]">
-              Quiet confidence, clear outcomes.
-            </h3>
-          </div>
-          <div className="space-y-6 text-lg leading-8 text-[#b7b9b3]">
-            <p>
-              I partner with teams to translate product goals into uncluttered
-              interfaces. My approach prioritizes hierarchy, spacing, and
-              typography to reduce cognitive load.
-            </p>
-            <p>
-              I enjoy shaping design systems, mapping flows, and building the
-              final experience in React and Next.js. The result is an interface
-              that feels modern, steady, and human.
-            </p>
-          </div>
-        </section>
 
-        <section id="projects" className="space-y-10">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div>
-              <p className="text-sm uppercase tracking-[0.4em] text-[#95a694]">
-                Selected Work
+            <div className="mt-6 flex flex-wrap gap-3">
+              <a className="btn btn-primary" href="#portfolio">
+                View My Work
+              </a>
+              <a className="btn btn-secondary" href="#contact">
+                Hire Me
+              </a>
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2.5" aria-label="social links">
+              <a
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(154,176,209,0.28)] bg-[rgba(15,22,36,0.8)] text-[var(--muted)] transition hover:border-[rgba(30,200,165,0.62)] hover:text-[var(--text)]"
+                href="#"
+                aria-label="GitHub"
+                title="GitHub"
+              >
+                G
+              </a>
+              <a
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(154,176,209,0.28)] bg-[rgba(15,22,36,0.8)] text-[var(--muted)] transition hover:border-[rgba(30,200,165,0.62)] hover:text-[var(--text)]"
+                href="#"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+              >
+                L
+              </a>
+              <a
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[rgba(154,176,209,0.28)] bg-[rgba(15,22,36,0.8)] text-[var(--muted)] transition hover:border-[rgba(30,200,165,0.62)] hover:text-[var(--text)]"
+                href="#"
+                aria-label="Facebook"
+                title="Facebook"
+              >
+                F
+              </a>
+            </div>
+          </div>
+
+          <div className="grid aspect-square place-items-center overflow-hidden rounded-[1.1rem] border border-[rgba(154,176,209,0.3)] bg-[linear-gradient(145deg,#0d1728,#16243a)]">
+            <Image
+              src="/Images/Main.jpeg"
+              alt="Eshtab Mahmud"
+              width={700}
+              height={700}
+              className="h-full w-full object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </section>
+
+      <Section id="about" title="About Me">
+        <p className="max-w-[66ch] text-[var(--muted)]">
+            I&apos;m a Computer Science student at AIUB and a frontend developer focused
+            on modern web experiences. I provide digital services including website
+            development, social media design, and brand support for small businesses.
+          </p>
+        <p className="mt-4 max-w-[66ch] text-[var(--muted)]">
+            My goal is to help small businesses and startups build a strong digital presence.
+        </p>
+      </Section>
+
+      <Section id="skills" title="Skills" lead="Developer + Designer + Business mindset.">
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {skills.map((group) => (
+            <article className="surface-card" key={group.title}>
+              <h3 className="mt-0">{group.title}</h3>
+              <div className="mt-3.5 grid gap-2.5">
+                {group.items.map((item) => (
+                  <div className="grid gap-1.5" key={item.name}>
+                    <div className="flex items-center justify-between text-sm text-[var(--muted)]">
+                      <span>{item.name}</span>
+                      <span>{item.level}%</span>
+                    </div>
+                    <div className="h-[0.58rem] overflow-hidden rounded-full bg-[rgba(154,176,209,0.15)]">
+                      <div
+                        className="h-full rounded-full bg-[linear-gradient(120deg,var(--accent-2),var(--accent))]"
+                        style={{ width: `${item.level}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="services" title="Services" lead="What clients can hire me for.">
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {services.map((service) => (
+            <article className="surface-card" key={service.title}>
+              <h3 className="mt-0">{service.title}</h3>
+              <ul className="mb-0 pl-[1.1rem] text-[var(--muted)]">
+                {service.points.map((point) => (
+                  <li key={point} className="mt-1.5">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="portfolio" title="Portfolio" lead="Selected projects and delivery samples.">
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <article className="surface-card" key={project.name}>
+              <div className="mb-4 h-32 rounded-xl border border-[rgba(154,176,209,0.24)] bg-[linear-gradient(120deg,rgba(47,128,237,0.18),rgba(30,200,165,0.08))]" />
+              <h3 className="mt-0">{project.name}</h3>
+              <p className="mt-2 text-[var(--muted)]">{project.description}</p>
+              <p className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-[rgba(154,176,209,0.22)] px-3 py-1.5 text-sm text-[var(--muted)]">
+                {project.tools}
               </p>
-              <h3 className="mt-4 font-[var(--font-display)] text-4xl text-[#f2f3f0]">
-                Projects that value clarity.
-              </h3>
-            </div>
-            <p className="max-w-xl text-base text-[#b7b9b3]">
-              A few highlights across product design, UX strategy, and front-end
-              delivery. Replace these with real case studies once ready.
-            </p>
-          </div>
-          <div className="grid gap-6 lg:grid-cols-3">
-            {[
-              {
-                title: "Sage Finance Platform",
-                type: "Product Design / Frontend",
-                summary:
-                  "Reimagined a fintech dashboard with a modular, analytics-first layout.",
-              },
-              {
-                title: "Studio Booking Suite",
-                type: "UX Strategy / UI System",
-                summary:
-                  "Created a reservation flow that cut booking time by 40%.",
-              },
-              {
-                title: "Care Delivery Portal",
-                type: "Design Systems",
-                summary:
-                  "Built a component library to keep multi-team delivery aligned.",
-              },
-            ].map((project) => (
-              <article
-                key={project.title}
-                className="flex h-full flex-col gap-6 rounded-3xl border border-[#1b1f1d] bg-[#0f1111]/80 p-8 transition hover:-translate-y-1 hover:border-[#95a694]"
-              >
-                <div className="text-sm uppercase tracking-[0.35em] text-[#b7b9b3]">
-                  {project.type}
-                </div>
-                <h4 className="text-2xl font-semibold text-[#f2f3f0]">
-                  {project.title}
-                </h4>
-                <p className="text-base leading-7 text-[#b7b9b3]">
-                  {project.summary}
-                </p>
-                <span className="mt-auto inline-flex items-center gap-2 text-sm uppercase tracking-[0.3em] text-[#95a694]">
-                  View case study
-                </span>
-              </article>
-            ))}
-          </div>
-        </section>
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                <a className="btn btn-secondary" href="#">
+                  View Project
+                </a>
+                <a className="btn btn-secondary" href="#">
+                  GitHub
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
 
-        <section id="skills" className="grid gap-10 lg:grid-cols-[0.4fr_0.6fr]">
-          <div>
-            <p className="text-sm uppercase tracking-[0.4em] text-[#95a694]">
-              Skills
-            </p>
-            <h3 className="mt-4 font-[var(--font-display)] text-4xl text-[#f2f3f0]">
-              Tools and practices I trust.
-            </h3>
+      <Section id="case-studies" title="Case Studies" lead="Problem to solution to measurable result.">
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {caseStudies.map((study, index) => (
+            <article className="surface-card" key={`${study.problem}-${index}`}>
+              <h3 className="mt-0">Case Study {index + 1}</h3>
+              <p className="mb-2">
+                <strong>Client Problem:</strong> {study.problem}
+              </p>
+              <p className="mb-2">
+                <strong>Solution:</strong> {study.solution}
+              </p>
+              <p className="mb-1.5">
+                <strong>Result:</strong>
+              </p>
+              <ul className="m-0 pl-[1.1rem] text-[var(--muted)]">
+                {study.result.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="testimonials" title="Testimonials">
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          {testimonials.map((testimonial) => (
+            <article className="surface-card" key={testimonial.author}>
+              <p className="mt-0 text-[1.06rem] text-[var(--text)]">
+                &quot;{testimonial.quote}&quot;
+              </p>
+              <p className="mb-0 text-[var(--muted)]">- {testimonial.author}</p>
+            </article>
+          ))}
+        </div>
+      </Section>
+
+      <Section id="cta">
+        <div className="surface-card p-8 text-center">
+          <h2 className="mb-3 text-[clamp(1.8rem,4vw,2.5rem)]">
+            Let&apos;s Work Together
+          </h2>
+          <p className="mx-auto max-w-[66ch] text-[var(--muted)]">
+            Need a website, designs, or digital help for your business?
+          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-3">
+            <a className="btn btn-primary" href="#contact">
+              Contact Me
+            </a>
+            <a className="btn btn-secondary" href="#contact">
+              Hire Me
+            </a>
           </div>
+        </div>
+      </Section>
+
+      <Section id="contact" title="Contact" lead="Let's build something valuable for your business.">
+        <div className="mt-5 grid gap-4 md:grid-cols-2">
+          <aside className="surface-card">
+            <h3 className="mt-0">Contact Details</h3>
+            <div className="grid gap-3 text-[var(--muted)]">
+              <p>Email: <a href="mailto:eshtab@example.com">eshtab@example.com</a></p>
+              <p>LinkedIn: <a href="#">linkedin.com/in/eshtab</a></p>
+              <p>GitHub: <a href="#">github.com/eshtab</a></p>
+              <p>Facebook: <a href="#">facebook.com/eshtab</a></p>
+              <p>WhatsApp: <a href="#">Chat on WhatsApp</a></p>
+            </div>
+          </aside>
+
+          <form className="surface-card grid gap-3" action="#" method="post">
+            <h3 className="mt-0">Send a Message</h3>
+            <InputField id="name" label="Name" />
+            <InputField id="email" label="Email" type="email" />
+            <TextareaField id="message" label="Message" />
+
+            <button className="btn btn-primary" type="submit">
+              Contact Me
+            </button>
+          </form>
+        </div>
+      </Section>
+
+      <Section id="future-ventures">
+        <div className="surface-card">
+          <h2 className="mb-3 text-[clamp(1.8rem,4vw,2.5rem)]">
+            Future Ventures
+          </h2>
+          <p className="max-w-[66ch] text-[var(--muted)]">
+            Founder of upcoming digital brand Dumham.
+          </p>
+        </div>
+      </Section>
+
+      <footer className="border-t border-[rgba(154,176,209,0.2)] py-6 text-[var(--muted)]">
+        <div className="mx-auto flex w-[min(1120px,92vw)] flex-wrap justify-between gap-4">
           <div className="flex flex-wrap gap-3">
-            {[
-              "Product Design",
-              "Design Systems",
-              "UX Research",
-              "UI Prototyping",
-              "Figma",
-              "React",
-              "Next.js",
-              "TypeScript",
-              "Tailwind CSS",
-              "Accessibility",
-              "Storybook",
-              "Framer Motion",
-            ].map((skill) => (
-              <span
-                key={skill}
-                className="rounded-full border border-[#1b1f1d] bg-[#0f1111]/80 px-5 py-2 text-sm uppercase tracking-[0.3em] text-[#b7b9b3]"
-              >
-                {skill}
-              </span>
-            ))}
+            <a href="#hero">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
           </div>
-        </section>
-
-        <section
-          id="contact"
-          className="rounded-3xl border border-[#1b1f1d] bg-[#0f1111]/80 p-10"
-        >
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-sm uppercase tracking-[0.4em] text-[#95a694]">
-                Contact
-              </p>
-              <h3 className="mt-4 font-[var(--font-display)] text-4xl text-[#f2f3f0]">
-                Let us build something quietly bold.
-              </h3>
-            </div>
-            <a
-              className="inline-flex items-center justify-center rounded-full border border-[#95a694] px-8 py-3 text-sm uppercase tracking-[0.3em] text-[#0b0c0c] transition hover:-translate-y-0.5 hover:bg-[#b7c4b5]"
-              href="mailto:hello@yourdomain.com"
-            >
-              hello@yourdomain.com
-            </a>
-          </div>
-          <div className="mt-10 flex flex-wrap items-center gap-6 text-sm uppercase tracking-[0.3em] text-[#b7b9b3]">
-            <a className="transition hover:text-[#f2f3f0]" href="#">
-              LinkedIn
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#">
-              GitHub
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#">
-              X / Twitter
-            </a>
-            <a className="transition hover:text-[#f2f3f0]" href="#">
-              Email
-            </a>
-          </div>
-        </section>
-
-        <footer className="flex flex-wrap items-center justify-between gap-4 border-t border-[#1b1f1d] pt-6 text-sm text-[#b7b9b3]">
-          <span>© 2026 Eshtab Rak Mahmud. All rights reserved.</span>
-          <span>Designed and built with precision.</span>
-        </footer>
-      </main>
-    </div>
+          <p className="m-0">© 2026 Eshtab Mahmud - Digital Solutions</p>
+        </div>
+      </footer>
+    </main>
   );
 }
